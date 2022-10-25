@@ -357,7 +357,7 @@ eqSlice eqv slice1 slice2
 #else
     -- Use PartialTypeSignatures to infer Tickish type
     go_tick :: RnEnv2 -> _ -> _ -> Bool
-    go_tick env (Breakpoint lid lids) (Breakpoint rid rids)
+    go_tick env (Breakpoint { breakpointId = lid, breakpointFVs = lids}) (Breakpoint { breakpointId = rid, breakpointFVs = rids})
 #endif
           = lid == rid  &&  map (rnOccL env) lids == map (rnOccR env) rids
     go_tick _ l r = l == r
