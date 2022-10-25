@@ -1,6 +1,7 @@
 -- | This module implements some analyses of Core expressions necessary for
 -- "Test.Inspection". Normally, users of this package can ignore this module.
-{-# LANGUAGE CPP, FlexibleContexts, PatternSynonyms, MultiWayIf #-}
+{-# LANGUAGE CPP, FlexibleContexts, PatternSynonyms, MultiWayIf, PartialTypeSignatures #-}
+{-# OPTIONS_GHC -Wno-partial-type-signatures #-}
 module Test.Inspection.Core
   ( slice
   , pprSlice
@@ -354,7 +355,8 @@ eqSlice eqv slice1 slice2
     go_tick :: RnEnv2 -> CoreTickish -> CoreTickish -> Bool
     go_tick env (Breakpoint _ lid lids) (Breakpoint _ rid rids)
 #else
-    go_tick :: RnEnv2 -> Tickish Id -> Tickish Id -> Bool
+    -- Use PartialTypeSignatures to infer Tickish type
+    go_tick :: RnEnv2 -> _ -> _ -> Bool
     go_tick env (Breakpoint lid lids) (Breakpoint rid rids)
 #endif
           = lid == rid  &&  map (rnOccL env) lids == map (rnOccR env) rids
